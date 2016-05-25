@@ -1,0 +1,138 @@
+//
+//  MCPrefixHeader.pch
+//  ZhiZhu
+//
+//  Created by 周陆洲 on 15/12/2.
+//  Copyright © 2015年 wt-vrs. All rights reserved.
+//
+
+#ifndef MCPrefixHeader_pch
+#define MCPrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+/**
+ *  框架/工具
+ */
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "ToolMothod.h"
+#import "MCNetworking.h"
+#import "MCNetworkingLogin.h"
+
+/**
+ *  第三方库
+ */
+#import "Masonry.h"
+#import "MJRefresh.h"
+#import "JSONModel.h"
+#import "SDWebImageManager.h"
+#import "MBProgressHUD.h"
+#import "MJExtension.h"
+
+
+
+/**
+ *  页面
+ */
+#import "AppDelegate.h"
+
+
+/**
+ *  NavigationBar
+ *
+ */
+
+
+
+/**
+ *  类别
+ */
+#import "NSDate+MCDate.h"
+#import "NSString+FileSize.h"
+#import "UIBarButtonItem+MCBtn.h"
+#import "UIImage+MCCompress.h"
+#import "UIView+DynamicFrame.h"
+#import "UITextField+MC.h"
+#import "NSString+FileSize.h"
+#import "UIView+RGSize.h"
+
+/**
+ *  网络接口
+ */
+#define testUrlString @"http://xiaohongshu.com"  //外网
+
+
+//问答
+
+
+
+//第三方登录
+
+ /**
+ *  Masonry
+ */
+#import <Masonry.h>
+
+/**
+ *  屏幕尺寸/颜色
+ */
+#define SCREEN_WIDTH [[UIScreen mainScreen] bounds].size.width
+#define SCREEN_HEIGHT [[UIScreen mainScreen] bounds].size.height
+
+#define VIEW_WEDTH self.view.bounds.size.width
+#define VIEW_HEIGHT self.view.bounds.size.height
+
+#define MCColor(r, g, b ,alp) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:alp]
+
+
+
+/**
+ *  获取设备版本
+ */
+#define IOS_7 [[UIDevice currentDevice].systemVersion floatValue] < 8.0
+
+#define IOS_9 [[UIDevice currentDevice].systemVersion floatValue] >= 9.0
+
+#define IOS_8 [[UIDevice currentDevice].systemVersion floatValue] >= 8.0
+
+#define CurrentScreenW [UIScreen mainScreen].bounds.size.width
+#define CurrentScreenH [UIScreen mainScreen].bounds.size.height
+
+#define IOS4 CurrentScreenW == 320 && CurrentScreenH == 480
+#define IOS5 CurrentScreenW == 320 && CurrentScreenH == 568
+#define IOS6 CurrentScreenW == 375 && CurrentScreenH == 667
+#define IOS6P CurrentScreenW == 414 && CurrentScreenH == 736
+
+
+/**
+ *  字体
+ */
+#define MCFont(size) [UIFont systemFontOfSize:size]
+#define MCBlodFont(size) [UIFont boldSystemFontOfSize:size]
+
+
+/**
+ *  其他
+ */
+#define DEFAULT_thumbImageWidth 300.0f
+#define DEFAULT_thumbImageHeight 400.0f
+
+
+#endif /* MCPrefixHeader_pch */
+
+
+
+
+
+
+
+
+
+
+
+
+

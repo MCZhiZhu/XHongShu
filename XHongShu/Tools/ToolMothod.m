@@ -1,0 +1,13 @@
+//
+//  ToolMothod.m
+//  XHongShu
+//
+//  Created by 周陆洲 on 16/5/24.
+//  Copyright © 2016年 MuChen. All rights reserved.
+//
+
+#import "ToolMothod.h"
+
+@implementation ToolMothod
+
+@end

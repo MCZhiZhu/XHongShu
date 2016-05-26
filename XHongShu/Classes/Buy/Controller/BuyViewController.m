@@ -19,7 +19,7 @@
    self.navigationItem.title = @"福利社";
     NSLog(@"hahahhah");
     
-    NSLog(@"kdkdkddkdkkdd");
+    NSLog(@"branch_muchen");
 }
 
 - (void)didReceiveMemoryWarning {

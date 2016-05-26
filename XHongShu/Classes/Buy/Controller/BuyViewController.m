@@ -19,6 +19,8 @@
    self.navigationItem.title = @"福利社";
     
     NSLog(@"branch_xiaomu");
+    
+    NSLog(@"add branch1");
 
 }
 

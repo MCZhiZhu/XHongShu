@@ -17,9 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
    self.navigationItem.title = @"福利社";
-    NSLog(@"hahahhah");
-    
-    NSLog(@"kdkdkddkdkkdd");
+
 }
 
 - (void)didReceiveMemoryWarning {

@@ -7,7 +7,7 @@
 
 #import <JSONModel/JSONModel.h>
 
-@interface Destination :JSONModel
+@interface DestinationModel :JSONModel
 
 @property (nonatomic, strong) NSArray *banners;
 @property (nonatomic, copy) NSString *style;

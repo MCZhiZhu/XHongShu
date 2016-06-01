@@ -7,7 +7,7 @@
 
 #import <JSONModel/JSONModel.h>
 
-@class Destination;
+@class DestinationModel;
 
 @interface Banners :JSONModel
 
@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSArray *scenario;
 @property (nonatomic, copy) NSString *image;
 @property (nonatomic, copy) NSString *oid;
-@property (nonatomic, strong) Destination *destination;
+@property (nonatomic, strong) DestinationModel *destination;
 @property (nonatomic, copy) NSString *totalFollows;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *events;

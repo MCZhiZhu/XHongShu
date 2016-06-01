@@ -8,7 +8,7 @@
 #import "Banners.h"
 #import "Recommends.h"
 #import "Scenario.h"
-#import "Destination.h"
+#import "DestinationModel.h"
 
 @implementation Banners
 

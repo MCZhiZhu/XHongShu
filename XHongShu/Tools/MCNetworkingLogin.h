@@ -7,18 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFNetworking.h>
 
 @interface MCNetworkingLogin : NSObject
 
 + (void)postLogin:(NSString *)urlString
   parameters:(id)parameters
-     success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-     failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+     success:(void (^)(NSURLSessionDataTask * task, id responseObject))success
+     failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
 + (void)getLogin:(NSString *)urlString
  parameters:(id)parameters
-    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+    success:(void (^)(NSURLSessionDataTask * task, id responseObject))success
+    failure:(void (^)(NSURLSessionDataTask * task, NSError * error))failure;
 
 
 
@@ -27,7 +28,7 @@
                      parameterOfimages:(NSString *)parameter
                         parametersDict:(NSDictionary *)parameters
                       compressionRatio:(float)ratio
-                          succeedBlock:(void(^)(id operation, id responseObject))succeedBlock
-                           failedBlock:(void(^)(id operation, NSError *error))failedBlock
-                   uploadProgressBlock:(void(^)(float uploadPercent,long long totalBytesWritten,long long totalBytesExpectedToWrite))uploadProgressBlock;
+                              progress:(void(^)(NSProgress *uploadProgres))progressBlock
+                          succeedBlock:(void(^)(NSURLSessionDataTask * task, id responseObject))succeedBlock
+                           failedBlock:(void(^)(NSURLSessionDataTask * task, id responseObject))failedBlock;
 @end

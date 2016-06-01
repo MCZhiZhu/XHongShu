@@ -14,15 +14,12 @@
 {
     NSDictionary *params = [param mj_keyValues];
     
-    [MCNetworking GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+    [MCNetworking GET:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             id result = [resultClass mj_objectWithKeyValues:responseObject];
             success(result);
         }
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (failure) {
             failure(error);
         }
@@ -33,19 +30,17 @@
 {
     NSDictionary *params = [param mj_keyValues];
     
-    [MCNetworking POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+    [MCNetworking POST:url parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (success) {
             id result = [resultClass mj_objectWithKeyValues:responseObject];
             success(result);
         }
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (failure) {
             failure(error);
         }
     }];
+
 }
 
 @end

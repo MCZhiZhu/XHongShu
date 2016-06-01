@@ -17,7 +17,6 @@
 		A11F2A7B1CF424370041402F /* XHongShuTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2A7A1CF424370041402F /* XHongShuTests.m */; };
 		A11F2A861CF424370041402F /* XHongShuUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2A851CF424370041402F /* XHongShuUITests.m */; };
 		A11F2AB01CF42BFF0041402F /* ToolMothod.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2AAF1CF42BFF0041402F /* ToolMothod.m */; };
-		A11F2AB31CF42C890041402F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2AB21CF42C890041402F /* Reachability.m */; };
 		A11F2AC21CF42CA70041402F /* NSDate+MCDate.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2AB51CF42CA70041402F /* NSDate+MCDate.m */; };
 		A11F2AC31CF42CA70041402F /* NSString+FileSize.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2AB71CF42CA70041402F /* NSString+FileSize.m */; };
 		A11F2AC41CF42CA70041402F /* UIBarButtonItem+MCBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = A11F2AB91CF42CA70041402F /* UIBarButtonItem+MCBtn.m */; };
@@ -928,6 +927,8 @@
 		A1683BBD1CF4432200BB9E31 /* MCNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = A1683BB51CF4432200BB9E31 /* MCNetworking.m */; };
 		A1683BBE1CF4432200BB9E31 /* MCNetworkingBase.m in Sources */ = {isa = PBXBuildFile; fileRef = A1683BB71CF4432200BB9E31 /* MCNetworkingBase.m */; };
 		A1683BBF1CF4432200BB9E31 /* MCNetworkingLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = A1683BB91CF4432200BB9E31 /* MCNetworkingLogin.m */; };
+		A1AFCAFE1CFD65B200E6A0E6 /* MCPicModle.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFCAFD1CFD65B200E6A0E6 /* MCPicModle.m */; };
+		A1AFCB011CFD66D800E6A0E6 /* UIImage+MCExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = A1AFCB001CFD66D800E6A0E6 /* UIImage+MCExtension.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -969,8 +970,6 @@
 		A11F2AAD1CF42A800041402F /* MCPrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCPrefixHeader.pch; sourceTree = "<group>"; };
 		A11F2AAE1CF42BFF0041402F /* ToolMothod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToolMothod.h; sourceTree = "<group>"; };
 		A11F2AAF1CF42BFF0041402F /* ToolMothod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToolMothod.m; sourceTree = "<group>"; };
-		A11F2AB11CF42C890041402F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		A11F2AB21CF42C890041402F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		A11F2AB41CF42CA70041402F /* NSDate+MCDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+MCDate.h"; sourceTree = "<group>"; };
 		A11F2AB51CF42CA70041402F /* NSDate+MCDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+MCDate.m"; sourceTree = "<group>"; };
 		A11F2AB61CF42CA70041402F /* NSString+FileSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FileSize.h"; sourceTree = "<group>"; };
@@ -1899,6 +1898,11 @@
 		A1683BB71CF4432200BB9E31 /* MCNetworkingBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNetworkingBase.m; sourceTree = "<group>"; };
 		A1683BB81CF4432200BB9E31 /* MCNetworkingLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCNetworkingLogin.h; sourceTree = "<group>"; };
 		A1683BB91CF4432200BB9E31 /* MCNetworkingLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCNetworkingLogin.m; sourceTree = "<group>"; };
+		A1AFCAFB1CFD63D300E6A0E6 /* MCSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCSingleton.h; sourceTree = "<group>"; };
+		A1AFCAFC1CFD65B200E6A0E6 /* MCPicModle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCPicModle.h; sourceTree = "<group>"; };
+		A1AFCAFD1CFD65B200E6A0E6 /* MCPicModle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCPicModle.m; sourceTree = "<group>"; };
+		A1AFCAFF1CFD66D800E6A0E6 /* UIImage+MCExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MCExtension.h"; sourceTree = "<group>"; };
+		A1AFCB001CFD66D800E6A0E6 /* UIImage+MCExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MCExtension.m"; sourceTree = "<group>"; };
 		B10D3FA65CF1894FD154F4F4 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -2218,8 +2222,6 @@
 		A11F2AAA1CF429FF0041402F /* ThirdFrameWork */ = {
 			isa = PBXGroup;
 			children = (
-				A11F2AB11CF42C890041402F /* Reachability.h */,
-				A11F2AB21CF42C890041402F /* Reachability.m */,
 			);
 			path = ThirdFrameWork;
 			sourceTree = "<group>";
@@ -2227,6 +2229,9 @@
 		A11F2AAB1CF429FF0041402F /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				A1AFCAFC1CFD65B200E6A0E6 /* MCPicModle.h */,
+				A1AFCAFD1CFD65B200E6A0E6 /* MCPicModle.m */,
+				A1AFCAFB1CFD63D300E6A0E6 /* MCSingleton.h */,
 				A1683BB21CF4432200BB9E31 /* MCDatabase.h */,
 				A1683BB31CF4432200BB9E31 /* MCDatabase.m */,
 				A1683BB41CF4432200BB9E31 /* MCNetworking.h */,
@@ -2245,6 +2250,8 @@
 		A11F2AAC1CF429FF0041402F /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				A1AFCAFF1CFD66D800E6A0E6 /* UIImage+MCExtension.h */,
+				A1AFCB001CFD66D800E6A0E6 /* UIImage+MCExtension.m */,
 				A11F2AB41CF42CA70041402F /* NSDate+MCDate.h */,
 				A11F2AB51CF42CA70041402F /* NSDate+MCDate.m */,
 				A11F2AB61CF42CA70041402F /* NSString+FileSize.h */,
@@ -4354,8 +4361,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1AFCAFE1CFD65B200E6A0E6 /* MCPicModle.m in Sources */,
 				A11F2ADD1CF4300B0041402F /* MeViewController.m in Sources */,
 				A11F2AB01CF42BFF0041402F /* ToolMothod.m in Sources */,
+				A1AFCB011CFD66D800E6A0E6 /* UIImage+MCExtension.m in Sources */,
 				A1683BBC1CF4432200BB9E31 /* MCDatabase.m in Sources */,
 				A11F2ADA1CF42FDE0041402F /* FindViewController.m in Sources */,
 				A11F2AD11CF42EF10041402F /* MyNavigationController.m in Sources */,
@@ -4369,7 +4378,6 @@
 				A11F2AE01CF4301A0041402F /* MessageViewController.m in Sources */,
 				A11F2AC71CF42CA70041402F /* UIView+DynamicFrame.m in Sources */,
 				A1683BBE1CF4432200BB9E31 /* MCNetworkingBase.m in Sources */,
-				A11F2AB31CF42C890041402F /* Reachability.m in Sources */,
 				A11F2AC51CF42CA70041402F /* UIImage+MCCompress.m in Sources */,
 				A1683BBF1CF4432200BB9E31 /* MCNetworkingLogin.m in Sources */,
 				A11F2AC31CF42CA70041402F /* NSString+FileSize.m in Sources */,

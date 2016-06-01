@@ -10,9 +10,9 @@
 
 @implementation MCNetworkingLogin
 
-+(void)postLogin:(NSString *)urlString parameters:(id)parameters success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
++(void)postLogin:(NSString *)urlString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *token = [userDefaults stringForKey:@"token"];
@@ -21,25 +21,32 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/plain", @"text/html", nil];
     
     urlString = [testUrlString stringByAppendingString:urlString];
-    [manager POST:urlString
-       parameters:parameters
-          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-              if (success) {
-                  success(operation, responseObject);
-                  
-              }
-          }
-          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              if (failure) {
-                  failure(operation, error);
-              }
-          }];
-    
+    [manager POST:urlString parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (success)
+        {
+            success(task, responseObject);
+        }
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO]; // 关闭状态栏动画
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (failure)
+        {
+            failure(task, error);
+        }
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO]; // 关闭状态栏动画
+    }];
 }
 
-+(void)getLogin:(NSString *)urlString parameters:(id)parameters success:(void (^)(AFHTTPRequestOperation *, id))success failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure
+
++(void)getLogin:(NSString *)urlString parameters:(id)parameters success:(void (^)(NSURLSessionDataTask *, id))success failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *token = [userDefaults stringForKey:@"token"];
@@ -48,19 +55,27 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json", @"text/plain", @"text/html", nil];
     
     urlString = [testUrlString stringByAppendingString:urlString];
-    [manager GET:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        if (success) {
-            success(operation, responseObject);
-            
+    
+    [manager GET:urlString parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (success)
+        {
+            success(task, responseObject);
         }
-    }
-         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-             if (failure) {
-                 failure(operation, error);
-             }
-         }];
-
-
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (failure)
+        {
+            failure(task, error);
+        }
+        
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }];
 }
 
 
@@ -77,15 +92,8 @@
  *  @param failedBlock         失败的回调
  *  @param uploadProgressBlock 上传进度的回调
  */
-+(void)startMultiPartUploadTaskWithURL:(NSString *)url
-                           imagesArray:(NSArray *)images
-                     parameterOfimages:(NSString *)parameter
-                        parametersDict:(NSDictionary *)parameters
-                      compressionRatio:(float)ratio
-                          succeedBlock:(void (^)(id, id))succeedBlock
-                           failedBlock:(void (^)(id, NSError *))failedBlock
-                   uploadProgressBlock:(void (^)(float, long long, long long))uploadProgressBlock{
-    
++(void)startMultiPartUploadTaskWithURL:(NSString *)url imagesArray:(NSArray *)images parameterOfimages:(NSString *)parameter parametersDict:(NSDictionary *)parameters compressionRatio:(float)ratio progress:(void (^)(NSProgress *))progressBlock succeedBlock:(void (^)(NSURLSessionDataTask *, id))succeedBlock failedBlock:(void (^)(NSURLSessionDataTask *, id))failedBlock
+{
     if (images.count == 0) {
         NSLog(@"上传内容没有包含图片");
         return;
@@ -97,7 +105,7 @@
         }
     }
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *token = [userDefaults stringForKey:@"token"];
     [manager.requestSerializer setValue:token forHTTPHeaderField:@"token"];
@@ -106,8 +114,7 @@
     
     NSString *urlString = [testUrlString stringByAppendingString:url];
     
-    AFHTTPRequestOperation *operation = [manager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        
+    [manager POST:urlString parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         int i = 0;
         //根据当前系统时间生成图片名称
         NSDate *date = [NSDate date];
@@ -127,27 +134,19 @@
                 img = [image makeThumbnailFromImage:image scale:1.0];
             }
             
-//            img = [image scaleToSize:image size:CGSizeMake(<#CGFloat width#>, <#CGFloat height#>)]
+            //            img = [image scaleToSize:image size:CGSizeMake(<#CGFloat width#>, <#CGFloat height#>)]
             imageData = UIImageJPEGRepresentation(img, 1.0f);
             
             //image/jpg/png/jpeg
             [formData appendPartWithFileData:imageData name:[NSString stringWithFormat:@"%@%d",parameter,i] fileName:fileName mimeType:@"image/jpeg"];
             i ++;
         }
-        
-        
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        succeedBlock(operation,responseObject);
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@",error);
-        failedBlock(operation,error);
-        
-    }];
-    
-    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        CGFloat percent = totalBytesWritten * 1.0 / totalBytesExpectedToWrite;
-        uploadProgressBlock(percent,totalBytesWritten,totalBytesExpectedToWrite);
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        progressBlock(uploadProgress);
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        succeedBlock(task, responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failedBlock(task, error);
     }];
     
 }

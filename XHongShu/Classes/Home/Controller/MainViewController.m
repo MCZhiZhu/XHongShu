@@ -23,6 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tabBar.barTintColor = TabBarColor;
+    
     [self createUI];
     [self createTabBar];
 }
@@ -36,25 +38,26 @@
     
      //发现
      FindViewController *findVC = [[FindViewController alloc] init];
-     UINavigationController *findNav = [[UINavigationController alloc] initWithRootViewController:findVC];
+     MyNavigationController *findNav = [[MyNavigationController alloc] initWithRootViewController:findVC];
      
      //购买
      BuyViewController *buyVC = [[BuyViewController alloc] init];
-     UINavigationController *buyNav = [[UINavigationController alloc] initWithRootViewController:buyVC];
+     MyNavigationController *buyNav = [[MyNavigationController alloc] initWithRootViewController:buyVC];
      
      //消息
      MessageViewController *messageVC = [[MessageViewController alloc] init];
-     UINavigationController *messageNav = [[UINavigationController alloc] initWithRootViewController:messageVC];
+     MyNavigationController *messageNav = [[MyNavigationController alloc] initWithRootViewController:messageVC];
     
     
     //我
     MeViewController *meVC = [[MeViewController alloc] init];
-    UINavigationController *meNav = [[UINavigationController alloc] initWithRootViewController:meVC];
+    MyNavigationController *meNav = [[MyNavigationController alloc] initWithRootViewController:meVC];
     
     self.viewControllers = @[homeNav,findNav,buyNav,messageNav,meNav];
     
     
 }
+
 
 #pragma mark TabBar
 -(void)createTabBar

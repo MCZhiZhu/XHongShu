@@ -16,12 +16,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   self.navigationItem.title = @"福利社";
-    
-    NSLog(@"branch_xiaomu");
-    
-    NSLog(@"add branch1");
+    [self initNavBar];
 
+}
+
+- (void)initNavBar
+{
+    self.navigationItem.title = @"福利社";
+    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName, nil]];
+    self.navigationController.navigationBar.barTintColor = MainRedColor;
+    
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)didReceiveMemoryWarning {

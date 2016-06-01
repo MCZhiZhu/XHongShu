@@ -88,6 +88,10 @@
 
 #define MCColor(r, g, b ,alp) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:alp]
 
+#define MainRedColor [UIColor colorWithRed:250/255.0 green:0 blue:51/255.0 alpha:1.0]
+#define MainWhriteColor [UIColor colorWithRed:244/255.0 green:245/255.0 blue:246/255.0 alpha:1.0]
+#define TabBarColor [UIColor colorWithRed:251/255.0 green:251/255.0 blue:251/255.0 alpha:1.0]
+
 
 
 /**

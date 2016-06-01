@@ -31,4 +31,9 @@
     }
 }
 
+-(UIViewController *)childViewControllerForStatusBarStyle
+{
+    return self.topViewController;
+}
+
 @end

@@ -8,6 +8,8 @@
 #import <JSONModel/JSONModel.h>
 
 @class User;
+@class NewestComments;
+@class HotComments;
 
 @interface ForDetailsModel : JSONModel
 
@@ -20,7 +22,7 @@
 @property (nonatomic, assign) BOOL inlikes;
 @property (nonatomic, copy) NSString *category;
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong) NSArray *newestComments;
+@property (nonatomic, strong) NSArray<NewestComments*> *newestComments;
 @property (nonatomic, strong) NSArray *imagesList;
 @property (nonatomic, copy) NSString *geo;
 @property (nonatomic, copy) NSString *dataIdentifier;
@@ -32,6 +34,7 @@
 @property (nonatomic, strong)NSNumber *comments;
 @property (nonatomic, strong)NSNumber *favCount;
 @property (nonatomic, copy) NSString *desc;
+@property (nonatomic, strong) NSArray<HotComments*> *hotComments;
 
 
 @end

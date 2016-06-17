@@ -21,7 +21,7 @@
 +(JSONKeyMapper *)keyMapper
 
 {
-    return [[JSONKeyMapper alloc] initWithDictionary:@{@"relatedgoods_list":@"relatedgoodsList",@"like_users":@"likeUsers",@"share_link":@"shareLink",@"newest_comments":@"newestComments",@"images_list":@"imagesList",@"id":@"dataIdentifier",@"tags_info_2":@"tagsInfo2",@"fav_count":@"favCount"}];
+    return [[JSONKeyMapper alloc] initWithDictionary:@{@"relatedgoods_list":@"relatedgoodsList",@"like_users":@"likeUsers",@"share_link":@"shareLink",@"newest_comments":@"newestComments",@"images_list":@"imagesList",@"id":@"dataIdentifier",@"tags_info_2":@"tagsInfo2",@"fav_count":@"favCount",@"hot_comments":@"hotComments"}];
 }
 
 @end

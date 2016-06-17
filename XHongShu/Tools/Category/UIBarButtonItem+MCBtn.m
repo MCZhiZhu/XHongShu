@@ -17,6 +17,7 @@
     
     // 设置按钮的尺寸为背景图片的尺寸
     button.size = button.currentBackgroundImage.size;
+    button.adjustsImageWhenHighlighted = NO;
     
     // 监听按钮点击
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];

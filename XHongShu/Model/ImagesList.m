@@ -13,9 +13,4 @@
     return YES;
 }
 
-+(JSONKeyMapper *)keyMapper
-
-{
-    return [[JSONKeyMapper alloc] initWithDictionary:nil];
-}
 @end

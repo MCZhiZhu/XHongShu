@@ -10,4 +10,12 @@
 
 @interface HomeViewController : UIViewController
 
+/**
+ *  记录当前点击的indexPath
+ */
+@property (nonatomic, strong) NSIndexPath *currentIndexPath;
+@property (nonatomic, assign) CGRect finalCellRect;
+
+@property (nonatomic, strong) UICollectionView *collectionView;
+
 @end

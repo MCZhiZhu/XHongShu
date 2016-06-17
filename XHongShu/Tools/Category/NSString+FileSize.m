@@ -17,10 +17,14 @@
  *  @param maxSize 最大尺寸
  *
  */
-- (CGSize)sizeWithFont:(UIFont *)font maxSize:(CGSize)maxSize
+- (CGSize)sizeWithFont:(UIFont *)font lineSpacing:(CGFloat)spacing maxSize:(CGSize)maxSize
 {
-    NSDictionary *attrs = @{NSFontAttributeName : font};
-    return [self boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil].size;
+    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    
+    [paragraphStyle setLineSpacing:spacing];
+    
+    NSDictionary *attrs = @{NSFontAttributeName : font, NSParagraphStyleAttributeName : paragraphStyle};
+    return [self boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine attributes:attrs context:nil].size;
 }
 
 

@@ -16,7 +16,7 @@
  *  @param font    字体
  *  @param maxSize 最大尺寸
  */
-- (CGSize)sizeWithFont:(UIFont *)font maxSize:(CGSize)maxSize;
+- (CGSize)sizeWithFont:(UIFont *)font lineSpacing:(CGFloat)spacing maxSize:(CGSize)maxSize;
 
 /**
  *  获取文件夹大小

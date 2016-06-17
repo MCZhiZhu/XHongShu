@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface ToolMothod : NSObject
-
++ (UIView *)createLineWithWidth:(CGFloat)width andHeight:(CGFloat)height andColor:(UIColor *)color;
 @end

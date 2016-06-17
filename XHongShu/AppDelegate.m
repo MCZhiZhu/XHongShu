@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "MainViewController.h"
+
 
 @interface AppDelegate ()
 
@@ -20,14 +20,18 @@
     // Override point for customization after application launch.
     
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    MainViewController *mainVC = [[MainViewController alloc] init];
-    self.window.rootViewController = mainVC;
+    _mainVC = [[MainViewController alloc] init];
+    self.window.rootViewController = _mainVC;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
     //状态栏颜色
     [UIApplication sharedApplication].statusBarHidden = NO;
 //    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    
+    UIBarButtonItem *
+    barItemInNavigationBar = [UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil];
+    [barItemInNavigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:15], NSFontAttributeName,[UIColor blackColor],NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     
     return YES;
 }

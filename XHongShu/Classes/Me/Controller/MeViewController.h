@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MyMessageModel.h"
 @interface MeViewController : UIViewController
-
+@property (nonnull,strong)MyMessageModel *userInfoModel;
 @end

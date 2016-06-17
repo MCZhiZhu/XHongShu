@@ -64,7 +64,19 @@
  *  网络接口
  */
 #define testUrlString @"http://xiaohongshu.com"  //外网
+#define userInfoUrlString @"/api/sns/v1/user/me?deviceId=1CC19DCD-F38E-4DA5-8BE1-5B164EC32CBF&lang=zh-Hans-CN&platform=iOS&sid=session.1148228305156433714&sign=873b71d9d1422f46b08c7aabbacd5367&t=1463736757"  //我的信息
+#define newsAlbumString @"/api/sns/v3/message?deviceId=1CC19DCD-F38E-4DA5-8BE1-5B164EC32CBF&lang=zh-Hans-CN&num=10&platform=iOS&sid=session.1148228305156433714&sign=14a45c37d355b5f3aaaad16230b333c9&source=discovery&t=1463736394&type=activities" //消息专题活动
 
+#define moreNewsAlbumString @"/api/sns/v3/message?deviceId=1CC19DCD-F38E-4DA5-8BE1-5B164EC32CBF&lang=zh-Hans-CN&num=10&platform=iOS&sid=session.1148228305156433714&sign=5f2e6214c3e8dda9ef7e6f669cdeae24&source=discovery&start=573c5986a1276563daf482ce&t=1463736502&type=activities"
+
+#define followTagsString @"/api/v1/tags/list?deviceId=1CC19DCD-F38E-4DA5-8BE1-5B164EC32CBF&filter=liked&lang=zh-Hans-CN&oid=user.573bda5a82ec392b5c7bcd16&platform=iOS&sid=session.1148228305156433714&sign=865fb7bf674588dc18c302e69283ac11&t=1463736877"
+
+#define addFriendspage1String  @"/api/sns/v1/recommend/user/explore?deviceId=A8F8D4EC-DBFC-464E-80C6-DA424ED54F15&lang=zh&page=1&platform=iOS&sid=session.1149841673846341272&sign=15308003bf30c724a9881783798b11e4&t=1466042698"   //添加好友第一页
+#define addFriendspage2String @"/api/sns/v1/recommend/user/explore?deviceId=A8F8D4EC-DBFC-464E-80C6-DA424ED54F15&lang=zh&page=2&platform=iOS&sid=session.1149841673846341272&sign=3a0c7dc24fe19a18c9da075931facdaf&t=1466042818"  //添加好友第二页
+
+#define buyItemString @"/api/store/v1/categories?deviceId=1CC19DCD-F38E-4DA5-8BE1-5B164EC32CBF&lang=zh-Hans-CN&platform=iOS&sid=session.1148228305156433714&sign=1705038acbbbf0b893423dc53c343015&t=1463735148"
+
+#define buyCrossFieldString @"/api/store/v1/banners/573bd7d98e307f0bea3c5dfe?deviceId=1CC19DCD-F38E-4DA5-8BE1-5B164EC32CBF&display_items_under_banner=1&lang=zh-Hans-CN&platform=iOS&sid=session.1148228305156433714&sign=f84c72b14fd21469655b045c1f32522b&t=1463736116"
 
 //问答
 

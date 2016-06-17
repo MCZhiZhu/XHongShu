@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MoreAlbumModel.h"
 @interface MessageViewController : UIViewController
-
+@property (nonnull,strong)MoreAlbumModel *albumModel;
 @end

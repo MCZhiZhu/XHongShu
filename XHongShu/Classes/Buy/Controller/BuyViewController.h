@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "RecommendDetailsModel.h"
 @interface BuyViewController : UIViewController
-
+@property (nonatomic,strong)RecommendDetailsModel *recommendDetailsModel;
 @end

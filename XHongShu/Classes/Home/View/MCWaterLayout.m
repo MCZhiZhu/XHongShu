@@ -34,7 +34,7 @@
         self.lineNumber = 2;
         self.rowSpacing = 10.0f;
         self.lineSpacing = 10.0f;
-        self.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+        self.sectionInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         _dicOfheight = [NSMutableDictionary dictionary];
         _array = [NSMutableArray array];
     }
@@ -49,7 +49,7 @@
     NSInteger count = [self.collectionView numberOfItemsInSection:0];
     //初始化好每列的高度
     for (NSInteger i = 0; i < self.lineNumber ; i++) {
-        [_dicOfheight setObject:@(self.sectionInset.top) forKey:[NSString stringWithFormat:@"%ld",i]];
+        [_dicOfheight setObject:@(self.sectionInsets.top) forKey:[NSString stringWithFormat:@"%ld",i]];
     }
     //得到每个item的属性值进行存储
     for (NSInteger i = 0 ; i < count; i ++) {
@@ -68,7 +68,7 @@
             maxHeightline = key;
         }
     }];
-    return CGSizeMake(self.collectionView.bounds.size.width, [_dicOfheight[maxHeightline] floatValue] + self.sectionInset.bottom);
+    return CGSizeMake(self.collectionView.bounds.size.width, [_dicOfheight[maxHeightline] floatValue] + self.sectionInsets.bottom);
 }
 
 /**
@@ -80,7 +80,7 @@
     //通过indexPath创建一个item属性attr
     UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     //计算item宽
-    CGFloat itemW = (self.collectionView.bounds.size.width - (self.sectionInset.left + self.sectionInset.right) - (self.lineNumber - 1) * self.lineSpacing) / self.lineNumber;
+    CGFloat itemW = (self.collectionView.bounds.size.width - (self.sectionInsets.left + self.sectionInsets.right) - (self.lineNumber - 1) * self.lineSpacing) / self.lineNumber;
     CGFloat itemH = 0;
     //计算item高
     if (self.block != nil) {
@@ -100,18 +100,26 @@
     }];
     int line = [lineMinHeight intValue];
     //找出最短行后，计算item位置
-    frame.origin = CGPointMake(self.sectionInset.left + line * (itemW + self.lineSpacing), [_dicOfheight[lineMinHeight] floatValue]);
+    frame.origin = CGPointMake(self.sectionInsets.left + line * (itemW + self.lineSpacing), [_dicOfheight[lineMinHeight] floatValue]);
     _dicOfheight[lineMinHeight] = @(frame.size.height + self.rowSpacing + [_dicOfheight[lineMinHeight] floatValue]);
     attr.frame = frame;
     
     return attr;
 }
 /**
- *  返回视图框内item的属性，可以直接返回所有item属性
+ *  返回视图框内item的属性，可以直接返回所有item属性,指定区域的cell布局对象.定新的区域的时候调用
  */
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect{
     return _array;
 }
+
+//return YES;表示一旦滑动就实时调用上面这个layoutAttributesForElementsInRect:方法
+- (BOOL) shouldInvalidateLayoutForBoundsChange:(CGRect)newBound
+{
+    return YES;
+}
+
+
 /**
  *  设置计算高度block方法
  *

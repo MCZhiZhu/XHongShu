@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef CGFloat(^HeightBlock)(NSIndexPath *indexPath , CGFloat width);
-@interface MCWaterLayout : UICollectionViewLayout
+@interface MCWaterLayout : UICollectionViewFlowLayout
 
 /** 列数 */
 @property (nonatomic, assign) NSInteger lineNumber;
@@ -18,7 +18,7 @@ typedef CGFloat(^HeightBlock)(NSIndexPath *indexPath , CGFloat width);
 /** 列间距 */
 @property (nonatomic, assign) CGFloat lineSpacing;
 /** 内边距 */
-@property (nonatomic, assign) UIEdgeInsets sectionInset;
+@property (nonatomic, assign) UIEdgeInsets sectionInsets;
 /**
  *  计算各个item高度方法 必须实现
  *

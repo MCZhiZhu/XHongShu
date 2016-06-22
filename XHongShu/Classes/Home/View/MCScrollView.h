@@ -18,6 +18,7 @@
 
 @property (retain,nonatomic) NSMutableArray * imageNameArray;
 @property (retain,nonatomic) NSArray * imageItemArray;
+@property (nonatomic, strong) NSArray *tagArray;
 
 @property (assign,nonatomic) CGFloat scrollLastH;
 

@@ -168,7 +168,7 @@ static NSString * const IdentifierCell = @"MCCollectionViewCell";
             CGFloat itemH = model.itemSize.height;
             return itemH;
         }];
-        _waterLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+        _waterLayout.sectionInsets = UIEdgeInsetsMake(10, 10, 10, 10);
     }
     return _waterLayout;
 }

@@ -10,6 +10,7 @@
 #import "UIImageView+AFNetworking.h"
 #import <UIImageView+WebCache.h>
 #import "ImagesList.h"
+#import "XHTagView.h"
 
 #define UISCREENWIDTH  self.bounds.size.width   //图片的宽度
 #define UISCREENHEIGHT  self.bounds.size.height //图片的高度
@@ -28,6 +29,7 @@ static BOOL flag = YES;
     
     NSMutableArray *_imageWidthArray;
     NSMutableArray *_imageHeightArray;
+    NSArray *_tagPageArray;
     
     CGFloat _scrollContentW;
     CGFloat _leftScrollH;
@@ -105,6 +107,14 @@ static BOOL flag = YES;
     
 }
 
+-(void)setTagArray:(NSArray *)tagArray
+{
+    if (_tagArray == nil) {
+        _tagArray = [NSArray array];
+    }
+    _tagArray = tagArray;
+}
+
 
 -(void)getImageData
 {
@@ -123,6 +133,10 @@ static BOOL flag = YES;
 }
 
 -(void)getImageFirst{
+//    XHTagView *tagView = [[XHTagView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+//    tagView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+//    [_leftImageView addSubview:tagView];
+    
     _centerScrollH = [self getImageHWithImgW:_imageWidthArray[0] imgH:_imageHeightArray[0]];
     
     _rightScrollH = [self getImageHWithImgW:_imageWidthArray[1] imgH:_imageHeightArray[1]];
@@ -186,14 +200,14 @@ static BOOL flag = YES;
 
     self.contentSize = CGSizeMake(SCREEN_WIDTH * 3, self.size.height);
     _leftImageView.size = _centerImageView.size = _rightImageView.size = CGSizeMake(SCREEN_WIDTH, UISCREENHEIGHT);
-    NSLog(@"******* %lf",self.height);
+//    NSLog(@"******* %lf",self.height);
     [self.mcDelegate scrollViewDidScroll:scrollView viewHeight:UISCREENHEIGHT];
 }
 
 #pragma mark - 图片停止时,调用该函数使得滚动视图复用
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"*********** %lf  %lf  %lf",_leftScrollH,_centerScrollH,_rightScrollH);
+//    NSLog(@"*********** %lf  %lf  %lf",_leftScrollH,_centerScrollH,_rightScrollH);
     scrollView.userInteractionEnabled = YES;
     
     if (self.contentOffset.x == 0){

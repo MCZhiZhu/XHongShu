@@ -17,15 +17,23 @@
 #import "MCHub.h"
 #import "CommentCell.h"
 #import "NewestComments.h"
+#import "MCWaterLayout.h"
+#import "NotesCollectionCell.h"
+#import "CollectionCellFrame.h"
+#import "HeadView.h"
 
 #define LeftMargin 15
 static CGFloat const TopViewH = 55;
-static NSString *CommentIdentifier = @"CommentCell";
+static NSString *const CommentIdentifier = @"CommentCell";
+static NSString *const IdentifierCell = @"MCCollectionCell";
+static NSString *const headerViewIdentifier = @"hederview";
 
-@interface NotesDetailViewController ()<UIScrollViewDelegate,UINavigationControllerDelegate,MCScrollViewDelegate,MBProgressHUDDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface NotesDetailViewController ()<UIScrollViewDelegate,UINavigationControllerDelegate,MCScrollViewDelegate,MBProgressHUDDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UIScrollView *mainScrollView;
 @property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIView *headView;
+@property (nonatomic, strong) HeadView *headView2;
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UILabel *descripLabel;
 @property (nonatomic, strong) UIScrollView *tagView;
@@ -33,6 +41,13 @@ static NSString *CommentIdentifier = @"CommentCell";
 @property (nonatomic, strong) UILabel *commentLabel;
 @property (nonatomic, strong) UITableView *commentTableView;
 @property (nonatomic, strong) UIView *moreGoodsView;
+
+@property (nonatomic, strong) UICollectionView *collectionView;
+//@property (nonatomic, strong) UICollectionViewFlowLayout *collectionLayout;
+//@property (nonatomic, strong) MCWaterLayout *waterLayout;
+@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *frameArray;
+@property (nonatomic, strong) NSArray *tagArray;
 
 @property (nonatomic, strong)ForDetailsModel *detailModel;
 @property (nonatomic, strong) NSArray *commentArray;
@@ -57,6 +72,7 @@ static NSString *CommentIdentifier = @"CommentCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     _commentArray = [NSMutableArray array];
+    _frameArray = [NSMutableArray array];   
     
     self.navigationController.navigationBar.barTintColor = MainWhriteColor;
     self.navigationItem.title = @"笔记详情";
@@ -64,7 +80,7 @@ static NSString *CommentIdentifier = @"CommentCell";
     UIBarButtonItem *leftItem = [UIBarButtonItem itemWithImageName:@"navi_back~iphone" target:self action:@selector(goBack)];
     self.navigationItem.leftBarButtonItem = leftItem;
     
-    [self createTopView];
+    [self createHeaderView];
 
     [self getDetailData];
     
@@ -118,6 +134,7 @@ static NSString *CommentIdentifier = @"CommentCell";
     HUD.delegate = self;
     [HUD show:YES];
     
+    _tagArray = [NSArray array];
     [MCNetworkingLogin getLogin:goodDetailUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSDictionary *dic = [NSDictionary dictionary];
         dic = responseObject[@"data"];
@@ -125,13 +142,41 @@ static NSString *CommentIdentifier = @"CommentCell";
         
         _commentArray = [NewestComments arrayOfModelsFromDictionaries:_detailModel.newestComments];
         
+        NSString *tagStr = [_detailModel.tagsInfo2 stringByReplacingOccurrencesOfString:@"\'" withString:@""];
+        _tagArray = [NSJSONSerialization JSONObjectWithData:[tagStr dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+        
         [self setData];
         
         _imageArray = [NSMutableArray arrayWithArray:_detailModel.imagesList];
         [_imageArray insertObject:self.imgDic atIndex:0];
         
         _imageScrollView.imageItemArray = _imageArray;
+        _imageScrollView.tagArray = _tagArray;
         
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [HUD hide:YES];
+    }];
+}
+
+/**
+ *  获取数据源
+ */
+- (void)getGoodListData
+{
+    _dataArray = [NSMutableArray array];
+    //封装请求参数
+    
+    [MCNetworkingLogin getLogin:goodDetailListUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSArray *array = [NSArray array];
+        array = responseObject[@"data"];
+        _dataArray = [GoodsListModel arrayOfModelsFromDictionaries:array];
+        
+        [self setFrameValues];
+        [self initCollectionView];
+        
+        // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+//        self.collectionView.mj_header = [MCRefreshHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+//        [self.collectionView.mj_header beginRefreshing];
         [HUD hide:YES];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [HUD hide:YES];
@@ -142,6 +187,9 @@ static NSString *CommentIdentifier = @"CommentCell";
  *  填充数据
  */
 -(void)setData{
+    
+//    [_bottomView removeFromSuperview];
+    
     User *userModel = _detailModel.user;
     [_userHeadView sd_setImageWithURL:[NSURL URLWithString:userModel.images]];
     _userName.text = userModel.nickname;
@@ -160,19 +208,25 @@ static NSString *CommentIdentifier = @"CommentCell";
     [_commentTableView setSize:CGSizeMake(SCREEN_WIDTH, _commentViewH+60)];
 
     _bottomView.frame = CGRectMake(0, CGRectGetMaxY(_imageScrollView.frame), SCREEN_WIDTH, CGRectGetMaxY(_commentTableView.frame)+10);
-    _mainScrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT+_bottomView.height);
+    
+    _headView2 = [[HeadView alloc]init];
+    _headView2 = (HeadView *)_headView;
+    _headView2.frame = CGRectMake(0, 0, SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
+    
+    [self getGoodListData];
+    
+//    _collectionView.origin = CGPointMake(0, CGRectGetMaxY(_bottomView.frame)+10);
+
 }
 
 /**
  *  创建顶部区域
  */
--(void)createTopView{
-    _mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-    _mainScrollView.showsVerticalScrollIndicator = NO;
-    _mainScrollView.showsHorizontalScrollIndicator = NO;
-    _mainScrollView.bounces = NO;
-    _mainScrollView.backgroundColor = MCColor(242, 246, 249, 1.0);
-    [self.view addSubview:_mainScrollView];
+-(void)createHeaderView{
+    
+    self.view.backgroundColor = MCColor(242, 246, 249, 1.0);
+    _headView = [[UIView alloc] init];
+    [self.view addSubview:_headView];
     
     //创建头像和昵称
     _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, TopViewH)];
@@ -185,14 +239,14 @@ static NSString *CommentIdentifier = @"CommentCell";
     [_topView addSubview:_userName];
     UITapGestureRecognizer *headViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(topViewClick)];
     [_topView addGestureRecognizer:headViewTap];
-    [_mainScrollView addSubview:_topView];
+    [_headView addSubview:_topView];
     
     //创建图片滚动区
     [self createImageScroll];
     
     _bottomView = [[UIView alloc]init];
     _bottomView.backgroundColor = [UIColor whiteColor];
-    [_mainScrollView addSubview:_bottomView];
+    [_headView addSubview:_bottomView];
     
     //创建描述详情
     _descripLabel = [[UILabel alloc] init];
@@ -223,8 +277,151 @@ static NSString *CommentIdentifier = @"CommentCell";
     [self createCommtentTableView];
     
     _bottomView.frame = CGRectMake(0, CGRectGetMaxY(_imageScrollView.frame), SCREEN_WIDTH, CGRectGetMaxY(_commentLabel.frame)+10);
-    _mainScrollView.contentSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_likeLabel.frame));
+    
+    _headView.frame = CGRectMake(0, 0, SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
+
 }
+
+-(void)setFrameValues
+{
+    for (GoodsListModel *model in _dataArray) {
+        CollectionCellFrame *frameModel = [[CollectionCellFrame alloc] init];
+        frameModel.goodsModel = model;
+        [_frameArray addObject:frameModel];
+    }
+}
+
+/**
+ *  初始化CollectionView
+ */
+- (void)initCollectionView
+{
+    [self.view addSubview:self.collectionView];
+}
+
+/**
+ *  重写get
+ */
+-(UICollectionView *)collectionView
+{
+    if (_collectionView == nil) {
+        MCWaterLayout *_waterLayout = [[MCWaterLayout alloc]init];
+        //计算每个item高度方法
+        [_waterLayout computeIndexCellHeightWithWidthBlock:^CGFloat(NSIndexPath *indexPath, CGFloat width) {
+            CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
+            CGFloat itemH = model.itemSize.height;
+            return itemH;
+        }];
+//        _waterLayout.itemSize = CGSizeMake((SCREEN_WIDTH-30)/2.0, 150);
+//        _waterLayout.minimumInteritemSpacing = 10;
+//        _waterLayout.minimumLineSpacing = 10;
+        _waterLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
+        _waterLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+        
+        _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:_waterLayout];
+        
+        _collectionView.contentInset = UIEdgeInsetsZero;
+        _collectionView.backgroundColor = MCColor(242, 246, 249, 1.0);
+
+        _collectionView.dataSource = self;
+        _collectionView.delegate = self;
+        [_collectionView registerNib:[UINib nibWithNibName:@"NotesCollectionCell" bundle:nil] forCellWithReuseIdentifier:IdentifierCell];
+        //注册头视图
+        [_collectionView  registerClass:[HeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerViewIdentifier];
+    }
+    return _collectionView;
+}
+
+//-(MCWaterLayout *)waterLayout
+//{
+//    if (_waterLayout == nil) {
+//        _waterLayout = [[MCWaterLayout alloc]init];
+//        //计算每个item高度方法
+//        [_waterLayout computeIndexCellHeightWithWidthBlock:^CGFloat(NSIndexPath *indexPath, CGFloat width) {
+//            CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
+//            CGFloat itemH = model.itemSize.height;
+//            return itemH;
+//        }];
+//        _waterLayout.itemSize = CGSizeMake((SCREEN_WIDTH-30)/2.0, 150);
+//        _waterLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
+//        _waterLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+//    }
+//    return _waterLayout;
+//}
+//
+//-(UICollectionViewFlowLayout *)collectionLayout{
+//    if (_collectionLayout == nil) {
+//        _collectionLayout = [[UICollectionViewFlowLayout alloc]init];
+//        _collectionLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
+//        _collectionLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+//        _waterLayout = [[MCWaterLayout alloc]init];
+//        [_waterLayout computeIndexCellHeightWithWidthBlock:^CGFloat(NSIndexPath *indexPath, CGFloat width) {
+//            CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
+//            CGFloat itemH = model.itemSize.height;
+//            return itemH;
+//        }];
+//        _waterLayout.sectionInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+//        _collectionLayout = _waterLayout;
+//    }
+//    return _collectionLayout;
+//}
+
+#pragma mark dataSource
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _dataArray.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    NotesCollectionCell *cell = [NotesCollectionCell cellWithCollectionView:collectionView indexPath:indexPath reuseIdentifier:IdentifierCell];
+    [cell systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    
+    cell.frameModel = _frameArray[indexPath.row];
+    
+    return cell;
+}
+
+#pragma mark delegate
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NotesDetailViewController *ndVC = [[NotesDetailViewController alloc] init];
+    
+    GoodsListModel *model = [_dataArray objectAtIndex:indexPath.row];
+    NSArray *array = [NSArray arrayWithArray:model.imagesList];
+    ndVC.imgDic = array[0];
+    ndVC.des = model.desc;
+    ndVC.likes = model.likes;
+    ndVC.favCount = model.favCount;
+    
+    [self.navigationController pushViewController:ndVC animated:YES];
+}
+
+//  返回头视图
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    //如果是头视图
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        HeadView *header=[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:headerViewIdentifier forIndexPath:indexPath];
+        //添加头视图的内容
+        
+        //头视图添加view
+        [header addSubview:_headView2];
+        return header;
+    }
+    //如果底部视图
+    //    if([kind isEqualToString:UICollectionElementKindSectionFooter]){
+    //
+    //    }
+    return nil;
+}
+//返回头headerView的大小
+//-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+//    
+//    return  _headView2.frame.size;
+//
+//}
+
 
 -(void)topViewClick{
     
@@ -239,7 +436,8 @@ static NSString *CommentIdentifier = @"CommentCell";
     CGFloat scrollH = [self getImageHWithImgW:[self.imgDic objectForKey:@"width"] imgH:[self.imgDic objectForKey:@"height"]];
     _imageScrollView = [[MCScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_topView.frame), SCREEN_WIDTH, scrollH)];
     _imageScrollView.mcDelegate = self;
-    [_mainScrollView addSubview:_imageScrollView];
+//    [_mainScrollView addSubview:_imageScrollView];
+    [_headView addSubview:_imageScrollView];
     
 }
 /**
@@ -265,6 +463,8 @@ static NSString *CommentIdentifier = @"CommentCell";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView viewHeight:(CGFloat)height
 {
     _bottomView.origin = CGPointMake(0, CGRectGetMaxY(scrollView.frame));
+//    _collectionView.origin = CGPointMake(0, CGRectGetMaxY(_bottomView.frame)+10);
+    _headView.frame = CGRectMake(0, 0, SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
 }
 
 #pragma mark tableViewDelegate

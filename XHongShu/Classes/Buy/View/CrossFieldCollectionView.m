@@ -38,10 +38,11 @@ static NSString *reuseIdentifier = @"CrossFieldCell";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     CrossFieldCollectionCell *cell = [_collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.goodsList = _dataArray[indexPath.row];
     return cell;
 }
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 10;
+    return _dataArray.count;
 }
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     return CGSizeMake(90,140);
@@ -68,8 +69,14 @@ static NSString *reuseIdentifier = @"CrossFieldCell";
     }
     
 }
-- (void)setDataArray:(NSArray *)dataArray{
-    _dataArray = dataArray;
+//- (void)setDataArray:(NSArray *)dataArray{
+//    _dataArray = dataArray;
+//}
+-(void)setEventModel:(Event *)eventModel{
+    
+    _eventModel = eventModel;
+    _dataArray = [GoodsList arrayOfModelsFromDictionaries:_eventModel.goodsList];
+    [_collectionView reloadData];
+    
 }
-
 @end

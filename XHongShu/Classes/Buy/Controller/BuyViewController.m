@@ -9,6 +9,7 @@
 #import "BuyViewController.h"
 #import "CategoryModel.h"
 #import "SXTitleLable.h"
+#import "TitleMenuView.h"
 #import "BuyCollectionViewController.h"
 @interface BuyViewController ()<UIScrollViewDelegate>
 {
@@ -59,26 +60,29 @@
     [MCNetworkingLogin getLogin:buyItemString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSArray *itemArray = responseObject[@"data"];
-        [self createItemBtn:itemArray];
+        for (int i = 0; i < itemArray.count; i ++) {
+            NSLog(@"%@",itemArray[i]);
+            _categoryModel = [[CategoryModel alloc]initWithDictionary:itemArray[i] error:nil];
+            NSDictionary *dict =[[NSDictionary alloc]initWithObjectsAndKeys:[[BuyCollectionViewController alloc]init],_categoryModel.name, nil];
+            [_itemArray addObject:dict];
+
+        }
+        TitleMenuView *titleMenu = [[TitleMenuView alloc]initWithFrame:CGRectMake(0, 64, VIEW_WEDTH - 30, VIEW_HEIGHT-64) WithViewControllers:_itemArray WithStyle:TitleMenuStyleLine WithTitleFont:13 AndTitleInterval:0];
+        
+        titleMenu.btnSelectedColor = [UIColor redColor];
+        
+        titleMenu.btnNormalColor = [UIColor blackColor];
+        
+        titleMenu.sliderColor = [UIColor redColor];
+        
+        [self.view addSubview:titleMenu];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         
         NSLog(@"%@",error);
     }];
 }
 
-- (void)getCrossFielData{
-    [MCNetworkingLogin getLogin:buyCrossFieldString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        NSDictionary *dictData = responseObject[@"data"];
-        _recommendDetailsModel = [[RecommendDetailsModel alloc]initWithDictionary:dictData error:nil];
-        NSLog(@"%@",_recommendDetailsModel);
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        NSLog(@"%@",error);
-    }];
 
-
-}
 
 - (void)createUI{
     _selectItemBtn = [[UIButton alloc]initWithFrame:CGRectMake(VIEW_WEDTH - 30, 64, 30, 30)];
@@ -88,75 +92,75 @@
     [self.view addSubview:_selectItemBtn];
    
 }
-#pragma mark 创建 itemBtn
--(void)createItemBtn:(NSArray *)itemArray{
-    
-    _itemScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, VIEW_WEDTH -30, 30)];
-    _itemScrollView.contentSize = CGSizeMake(itemArray.count*70, 0);
-    [self.view addSubview:_itemScrollView];
-
-    for (int i = 0; i < itemArray.count; i ++) {
-        
-        _categoryModel = [[CategoryModel alloc]initWithDictionary:itemArray[i] error:nil];
-     
-        UIButton *itemBtn = [[UIButton alloc]initWithFrame:CGRectMake(i*70, 0, 70, 30)];
-        itemBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [itemBtn setTitle:_categoryModel.name forState:UIControlStateNormal];
-        [itemBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [itemBtn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
-        itemBtn.tag = i;
-        [_itemArray addObject:itemBtn];
-        [itemBtn addTarget:self action:@selector(itemClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_itemScrollView addSubview:itemBtn];
-    }
-
-    
-    /** 添加子控制器 */
-    for (int i=0 ; i < itemArray.count ;i++){
-        BuyCollectionViewController *buyVC = [[BuyCollectionViewController alloc]init];
-        [_controlArray addObject:buyVC];
-        
-    }
-    _mainScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 94, VIEW_WEDTH, VIEW_HEIGHT - 94 -49)];
-    _mainScrollView.contentSize = CGSizeMake(itemArray.count*VIEW_WEDTH, 0);
-    _mainScrollView.backgroundColor = [UIColor grayColor];
-    _mainScrollView.pagingEnabled = YES;
-    _mainScrollView.delegate = self;
-    [self.view addSubview:_mainScrollView];
-
-//    [self loadViewControllerAtIndex:0];
-    
-//    UIViewController *vc = [self.childViewControllers firstObject];
-//    vc.view.frame = CGRectMake(0,0, VIEW_WEDTH, VIEW_HEIGHT - 94 -49);
-//    [_mainScrollView addSubview:vc.view];
-    
-    for (int j= 0; j < itemArray.count; j++) {
-        UIViewController *lastvc = _controlArray[j];
-        lastvc.view.frame =CGRectMake(j*VIEW_WEDTH,0, VIEW_WEDTH, VIEW_HEIGHT - 94 -49);
-        [_mainScrollView addSubview:lastvc.view];
-    }
-//    [self RedLine:0];
-
-
-}
-- (void)itemClick:(UIButton *)btn{
-    _index = btn.tag;
-    [self moveLine:_index];
-//    for (int i = 0; i<_itemArray.count; i++) {
-////        UIButton * btn =_controlArray[i];
-//        if (_index == i) {
-//            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//            if (btn.selected == NO) {
-                _mainScrollView.contentOffset = CGPointMake(_index*VIEW_WEDTH, 0);
-//            }
-//        }else{
-//            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//        }
+//#pragma mark 创建 itemBtn
+//-(void)createItemBtn:(NSArray *)itemArray{
+//    
+//    _itemScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, VIEW_WEDTH -30, 30)];
+//    _itemScrollView.contentSize = CGSizeMake(itemArray.count*70, 0);
+//    [self.view addSubview:_itemScrollView];
+//
+//    for (int i = 0; i < itemArray.count; i ++) {
+//        
+//        _categoryModel = [[CategoryModel alloc]initWithDictionary:itemArray[i] error:nil];
+//     
+//        UIButton *itemBtn = [[UIButton alloc]initWithFrame:CGRectMake(i*70, 0, 70, 30)];
+//        itemBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+//        [itemBtn setTitle:_categoryModel.name forState:UIControlStateNormal];
+//        [itemBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        [itemBtn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+//        itemBtn.tag = i;
+//        [_itemArray addObject:itemBtn];
+//        [itemBtn addTarget:self action:@selector(itemClick:) forControlEvents:UIControlEventTouchUpInside];
+//        [_itemScrollView addSubview:itemBtn];
+//    }
+//
+//    
+//    /** 添加子控制器 */
+//    for (int i=0 ; i < itemArray.count ;i++){
+//        BuyCollectionViewController *buyVC = [[BuyCollectionViewController alloc]init];
+//        [_controlArray addObject:buyVC];
 //        
 //    }
- 
-//  [self loadViewControllerAtIndex:btn.tag];
-}
+//    _mainScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 94, VIEW_WEDTH, VIEW_HEIGHT - 94 -49)];
+//    _mainScrollView.contentSize = CGSizeMake(itemArray.count*VIEW_WEDTH, 0);
+//    _mainScrollView.backgroundColor = [UIColor grayColor];
+//    _mainScrollView.pagingEnabled = YES;
+//    _mainScrollView.delegate = self;
+//    [self.view addSubview:_mainScrollView];
+//
+////    [self loadViewControllerAtIndex:0];
+//    
+////    UIViewController *vc = [self.childViewControllers firstObject];
+////    vc.view.frame = CGRectMake(0,0, VIEW_WEDTH, VIEW_HEIGHT - 94 -49);
+////    [_mainScrollView addSubview:vc.view];
+//    
+//    for (int j= 0; j < itemArray.count; j++) {
+//        UIViewController *lastvc = _controlArray[j];
+//        lastvc.view.frame =CGRectMake(j*VIEW_WEDTH,0, VIEW_WEDTH, VIEW_HEIGHT - 94 -49);
+//        [_mainScrollView addSubview:lastvc.view];
+//    }
+////    [self RedLine:0];
+//
+//
+//}
+//- (void)itemClick:(UIButton *)btn{
+//    _index = btn.tag;
+//    [self moveLine:_index];
+////    for (int i = 0; i<_itemArray.count; i++) {
+//////        UIButton * btn =_controlArray[i];
+////        if (_index == i) {
+////            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+////            if (btn.selected == NO) {
+//                _mainScrollView.contentOffset = CGPointMake(_index*VIEW_WEDTH, 0);
+////            }
+////        }else{
+////            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+////        }
+////        
+////    }
+// 
+////  [self loadViewControllerAtIndex:btn.tag];
+//}
 - (void)selectItem:(UIButton *)btn{
     if (btn.isSelected) {
         _selectItemBtn.selected = NO;
@@ -165,12 +169,12 @@
     }
 
 }
-/** 正在滚动 */
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    // 获得索引
-    _index = scrollView.contentOffset.x /_mainScrollView.frame.size.width;
-    [self moveLine:_index ];
-}
+///** 正在滚动 */
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    // 获得索引
+//    _index = scrollView.contentOffset.x /_mainScrollView.frame.size.width;
+//    [self moveLine:_index ];
+//}
 
 //- (void)loadViewControllerAtIndex:(NSInteger)index {
 //
@@ -256,35 +260,35 @@
 //    return CGRectMake(-VIEW_WEDTH* index,0, VIEW_WEDTH,  VIEW_HEIGHT - 143);
 //    
 //}
-
-- (void)changeView:(UIButton *)btn notSelected:(BOOL)selected{
-    NSInteger index = [_controlArray indexOfObject:btn];
-    [self moveLine:index];
-    for (int i = 0; i<_controlArray.count; i++) {
-        UIButton * btn =_controlArray[i];
-        if (btn.tag == i) {
-            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-
-        }else{
-            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        }
-        
-    }
-}
-- (void)RedLine:(NSInteger)indexs{
-    
-    _line= [[UIView alloc]initWithFrame:CGRectMake(0, 43, 70, 2)];
-    _line.backgroundColor = [UIColor redColor];
-    [self.view addSubview:_line];
-    
-}
--(void)moveLine:(NSInteger)indexs
-{
-    [UIView animateWithDuration:0.2 animations:^{
-        
-        _line.frame = CGRectMake(indexs*70, CGRectGetMaxY(_itemScrollView.frame) -1, 70, 2);
-    }];
-}
+//
+//- (void)changeView:(UIButton *)btn notSelected:(BOOL)selected{
+//    NSInteger index = [_controlArray indexOfObject:btn];
+//    [self moveLine:index];
+//    for (int i = 0; i<_controlArray.count; i++) {
+//        UIButton * btn =_controlArray[i];
+//        if (btn.tag == i) {
+//            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//
+//        }else{
+//            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//        }
+//        
+//    }
+//}
+//- (void)RedLine:(NSInteger)indexs{
+//    
+//    _line= [[UIView alloc]initWithFrame:CGRectMake(0, 43, 70, 2)];
+//    _line.backgroundColor = [UIColor redColor];
+//    [self.view addSubview:_line];
+//    
+//}
+//-(void)moveLine:(NSInteger)indexs
+//{
+//    [UIView animateWithDuration:0.2 animations:^{
+//        
+//        _line.frame = CGRectMake(indexs*70, CGRectGetMaxY(_itemScrollView.frame) -1, 70, 2);
+//    }];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

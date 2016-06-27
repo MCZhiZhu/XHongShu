@@ -9,7 +9,7 @@
 #import "XTPasterStageView.h"
 #import "XTPasterView.h"
 #import "UIImage+AddFunction.h"
-#import <XHTagView/XHTagView.h>
+#import "XHTagView.h"
 #define APPFRAME    [UIScreen mainScreen].bounds
 
 @interface XTPasterStageView () <XTPasterViewDelegate>

@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "GoodsList.h"
 @interface CrossFieldCollectionCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *name;
 
 @property (weak, nonatomic) IBOutlet UILabel *price;
+
+
+@property (nonatomic,strong)GoodsList *goodsList;
 @end

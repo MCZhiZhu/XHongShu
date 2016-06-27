@@ -17,11 +17,12 @@
 #import "MCHub.h"
 #import "CommentCell.h"
 #import "NewestComments.h"
-#import "MCWaterLayout.h"
+//#import "MCWaterLayout.h"
 #import "NotesCollectionCell.h"
 #import "CollectionCellFrame.h"
 #import "HeadView.h"
-
+//#import "JHHeaderFlowLayout.h"
+#import "JCCollectionViewWaterfallLayout.h"
 #define LeftMargin 15
 static CGFloat const TopViewH = 55;
 static NSString *const CommentIdentifier = @"CommentCell";
@@ -45,6 +46,9 @@ static NSString *const headerViewIdentifier = @"hederview";
 @property (nonatomic, strong) UICollectionView *collectionView;
 //@property (nonatomic, strong) UICollectionViewFlowLayout *collectionLayout;
 //@property (nonatomic, strong) MCWaterLayout *waterLayout;
+
+@property (nonatomic, strong) JCCollectionViewWaterfallLayout *layout;
+
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSMutableArray *frameArray;
 @property (nonatomic, strong) NSArray *tagArray;
@@ -67,6 +71,8 @@ static NSString *const headerViewIdentifier = @"hederview";
     MBProgressHUD *HUD;
     MCHub *hub;
     CGFloat _commentViewH;
+    HeadView *_header;
+    CGFloat scrollH;
 }
 
 - (void)viewDidLoad {
@@ -296,76 +302,33 @@ static NSString *const headerViewIdentifier = @"hederview";
  */
 - (void)initCollectionView
 {
-    [self.view addSubview:self.collectionView];
+    _layout = [[JCCollectionViewWaterfallLayout alloc]init];
+    _layout.headerHeight = CGRectGetMaxY(_bottomView.frame)+10;
+//    _layout.footerHeight = 30.0f;
+    _collectionView= [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:_layout];
+    
+    _collectionView.contentInset = UIEdgeInsetsZero;
+    _collectionView.backgroundColor = MCColor(242, 246, 249, 1.0);
+    
+    _collectionView.dataSource = self;
+    _collectionView.delegate = self;
+    [self.view addSubview:_collectionView];
+    [_collectionView registerNib:[UINib nibWithNibName:@"NotesCollectionCell" bundle:nil] forCellWithReuseIdentifier:IdentifierCell];
+    //注册头视图
+    [_collectionView  registerClass:[HeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerViewIdentifier];
+
+
 }
 
-/**
- *  重写get
- */
--(UICollectionView *)collectionView
+
+
+#pragma mark - UICollectionViewDataSource
+/** 返回有多少组  */
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    if (_collectionView == nil) {
-        MCWaterLayout *_waterLayout = [[MCWaterLayout alloc]init];
-        //计算每个item高度方法
-        [_waterLayout computeIndexCellHeightWithWidthBlock:^CGFloat(NSIndexPath *indexPath, CGFloat width) {
-            CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
-            CGFloat itemH = model.itemSize.height;
-            return itemH;
-        }];
-//        _waterLayout.itemSize = CGSizeMake((SCREEN_WIDTH-30)/2.0, 150);
-//        _waterLayout.minimumInteritemSpacing = 10;
-//        _waterLayout.minimumLineSpacing = 10;
-        _waterLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
-        _waterLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
-        
-        _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:_waterLayout];
-        
-        _collectionView.contentInset = UIEdgeInsetsZero;
-        _collectionView.backgroundColor = MCColor(242, 246, 249, 1.0);
-
-        _collectionView.dataSource = self;
-        _collectionView.delegate = self;
-        [_collectionView registerNib:[UINib nibWithNibName:@"NotesCollectionCell" bundle:nil] forCellWithReuseIdentifier:IdentifierCell];
-        //注册头视图
-        [_collectionView  registerClass:[HeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerViewIdentifier];
-    }
-    return _collectionView;
+    return 1;
+    
 }
-
-//-(MCWaterLayout *)waterLayout
-//{
-//    if (_waterLayout == nil) {
-//        _waterLayout = [[MCWaterLayout alloc]init];
-//        //计算每个item高度方法
-//        [_waterLayout computeIndexCellHeightWithWidthBlock:^CGFloat(NSIndexPath *indexPath, CGFloat width) {
-//            CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
-//            CGFloat itemH = model.itemSize.height;
-//            return itemH;
-//        }];
-//        _waterLayout.itemSize = CGSizeMake((SCREEN_WIDTH-30)/2.0, 150);
-//        _waterLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
-//        _waterLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
-//    }
-//    return _waterLayout;
-//}
-//
-//-(UICollectionViewFlowLayout *)collectionLayout{
-//    if (_collectionLayout == nil) {
-//        _collectionLayout = [[UICollectionViewFlowLayout alloc]init];
-//        _collectionLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
-//        _collectionLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
-//        _waterLayout = [[MCWaterLayout alloc]init];
-//        [_waterLayout computeIndexCellHeightWithWidthBlock:^CGFloat(NSIndexPath *indexPath, CGFloat width) {
-//            CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
-//            CGFloat itemH = model.itemSize.height;
-//            return itemH;
-//        }];
-//        _waterLayout.sectionInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-//        _collectionLayout = _waterLayout;
-//    }
-//    return _collectionLayout;
-//}
-
 #pragma mark dataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -402,12 +365,15 @@ static NSString *const headerViewIdentifier = @"hederview";
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
     //如果是头视图
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        HeadView *header=[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:headerViewIdentifier forIndexPath:indexPath];
+        _header=[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:headerViewIdentifier forIndexPath:indexPath];
         //添加头视图的内容
-        
+        _header.backgroundColor = [UIColor purpleColor];
         //头视图添加view
-        [header addSubview:_headView2];
-        return header;
+
+        [_header addSubview:_headView2];
+        _headView2.backgroundColor = [UIColor grayColor];
+//        header = _headView2;
+        return _header;
     }
     //如果底部视图
     //    if([kind isEqualToString:UICollectionElementKindSectionFooter]){
@@ -416,12 +382,17 @@ static NSString *const headerViewIdentifier = @"hederview";
     return nil;
 }
 //返回头headerView的大小
-//-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
-//    
-//    return  _headView2.frame.size;
-//
-//}
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    
+    return  _headView2.frame.size;
+//    return  CGSizeMake(_headView2.frame.size.width, _layout.headerHeight);
 
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    CollectionCellFrame *model = [_frameArray objectAtIndex:indexPath.row];
+    CGFloat itemH = model.itemSize.height;
+    return CGSizeMake((SCREEN_WIDTH -30)/2,itemH);
+}
 
 -(void)topViewClick{
     
@@ -433,7 +404,7 @@ static NSString *const headerViewIdentifier = @"hederview";
  */
 -(void)createImageScroll{
     
-    CGFloat scrollH = [self getImageHWithImgW:[self.imgDic objectForKey:@"width"] imgH:[self.imgDic objectForKey:@"height"]];
+    scrollH = [self getImageHWithImgW:[self.imgDic objectForKey:@"width"] imgH:[self.imgDic objectForKey:@"height"]];
     _imageScrollView = [[MCScrollView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_topView.frame), SCREEN_WIDTH, scrollH)];
     _imageScrollView.mcDelegate = self;
 //    [_mainScrollView addSubview:_imageScrollView];
@@ -463,10 +434,22 @@ static NSString *const headerViewIdentifier = @"hederview";
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView viewHeight:(CGFloat)height
 {
     _bottomView.origin = CGPointMake(0, CGRectGetMaxY(scrollView.frame));
-//    _collectionView.origin = CGPointMake(0, CGRectGetMaxY(_bottomView.frame)+10);
-    _headView.frame = CGRectMake(0, 0, SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
-}
+    _headView2.frame = CGRectMake(0, 0, SCREEN_WIDTH, CGRectGetMaxY(_bottomView.frame)+10);
+     _layout.headerHeight = CGRectGetMaxY(_bottomView.frame)+10;
+//
+//    _layout.headerReferenceSize = CGSizeMake(VIEW_WEDTH, CGRectGetMaxY(_bottomView.frame)+10);
+//    [self collectionView:_collectionView layout:_layout referenceSizeForHeaderInSection:0];
+    _header.frame = _headView2.frame;
 
+    _layout.ofSetHeight = height - scrollH;
+//    _collectionView.frame = self.view.bounds;
+    NSLog(@"------+++%f",height - scrollH);
+//    [_collectionView reloadData];
+
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+
+}
 #pragma mark tableViewDelegate
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

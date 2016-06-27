@@ -10,7 +10,7 @@
 #import "EditPotoView.h"
 #import "NavigationView.h"
 #import "SelectLabelViewController.h"
-#import <XHTagView/XHTagView.h>
+#import "XHTagView.h"
 #import "EditPotoModel.h"
 
 typedef enum {

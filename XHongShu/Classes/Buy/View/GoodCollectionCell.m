@@ -7,7 +7,7 @@
 //
 
 #import "GoodCollectionCell.h"
-
+#import <UIImageView+WebCache.h>
 @implementation GoodCollectionCell
 
 - (void)awakeFromNib {
@@ -21,5 +21,13 @@
         self = [array lastObject];
     }
     return self;
+}
+- (void)setGoodsListModel:(GoodsListModel *)goodsListModel{
+    _goodsListModel = goodsListModel;
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:_goodsListModel.image]];
+    self.goodName.text = _goodsListModel.title;
+    self.goodDes.text = _goodsListModel.desc;
+    self.goodPrice.text = [NSString stringWithFormat:@"￥%@",_goodsListModel.discountPrice];
+    
 }
 @end

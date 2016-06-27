@@ -12,7 +12,7 @@
 #import "XTPasterView.h"
 #import "NavigationView.h"
 #import "SelectLabelViewController.h"
-#import <XHTagView/XHTagView.h>
+#import "XHTagView.h"
 
 
 static const CGFloat width_pasterChoose = 110.0f ;

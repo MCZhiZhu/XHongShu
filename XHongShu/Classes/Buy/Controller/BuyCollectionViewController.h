@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "RecommendGoodsModel.h"
+#import "GoodsListModel.h"
+#import "Event.h"
 @interface BuyCollectionViewController : UIViewController
-
+@property (nonatomic,strong)RecommendGoodsModel *recommendGoodsModel;
+@property (nonatomic,strong)GoodsListModel *goodsListModel;
+@property (nonatomic,strong)Event *eventModel;
 @end

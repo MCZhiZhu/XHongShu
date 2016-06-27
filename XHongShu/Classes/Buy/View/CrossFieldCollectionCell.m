@@ -7,7 +7,7 @@
 //
 
 #import "CrossFieldCollectionCell.h"
-
+#import <UIImageView+WebCache.h>
 @implementation CrossFieldCollectionCell
 
 - (void)awakeFromNib {
@@ -21,5 +21,11 @@
         self = [array lastObject];
     }
     return self;
+}
+- (void)setGoodsList:(GoodsList *)goodsList{
+    _goodsList = goodsList;
+    self.name.text  = _goodsList.title;
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:_goodsList.image]];
+    self.price.text = [NSString stringWithFormat:@"￥%@ ￥%@",_goodsList.discountPrice,_goodsList.price];
 }
 @end
